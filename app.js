@@ -23,12 +23,22 @@ buttonReset[0].addEventListener('click', (e) => {
 function getRandomPhraseAsArray(arr) {
     const randomPhrase = arr[Math.floor( Math.random() * arr.length )];
     console.log(randomPhrase);
-    const newArray = randomPhrase.split(",");
+    const newArray = randomPhrase.split('');
     console.log(newArray);
-    return randomPhrase;
+    return newArray;
 }
-getRandomPhraseAsArray(phrases);
+// getRandomPhraseAsArray(phrases);
 
-function addPhraseToDisplay() {
-
+function addPhraseToDisplay(arr) {
+    for (let letter of arr) {
+        const li = document.createElement('li');
+        li.textContent = letter;
+        const ul = phrase.firstElementChild;
+        ul.append(li);
+        if (letter =! " ") {
+            li.className = "letter";
+        }
+    }
 }
+const phraseArray = getRandomPhraseAsArray(phrases);
+addPhraseToDisplay(phraseArray);
