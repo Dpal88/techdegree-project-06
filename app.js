@@ -35,10 +35,41 @@ function addPhraseToDisplay(arr) {
         li.textContent = letter;
         const ul = phrase.firstElementChild;
         ul.append(li);
-        if (letter =! " ") {
+        if (!(letter >= "a" && letter <= "z") &&
+            !(letter >= "A" && letter <= "Z")) { // Not working properly
+            li.className = "space";
+        } else {
             li.className = "letter";
         }
     }
 }
 const phraseArray = getRandomPhraseAsArray(phrases);
 addPhraseToDisplay(phraseArray);
+
+function checkLetter(guess) {
+    const li = document.getElementsByTagName('li');
+    if (li.className === "letter") {
+        for (let i = 0; i < li; i++) {
+            if (guess.textContent === li.textContent) {
+                li.className = 'show';
+                const match = guess;
+                return match;
+            } else {
+                return null;
+            }
+        }
+    }
+}
+
+//Not Finished
+keyboard.addEventListener('click', (e) => {
+    const key = keyboard.firstElementChild.firstElementChild;
+    if (e.target === key) {
+        key.className = "chosen";
+        key.setAttribute("disabled")
+        const userGuess = checkLetter(key);
+        return userGuess;
+    } else {
+
+    }
+})
