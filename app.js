@@ -1,7 +1,7 @@
 const keyboard = document.getElementById('qwerty');
 const phrase = document.getElementById('phrase');
 const startButton = document.getElementsByClassName('btn__reset');
-const missed = 0;
+let missed = 0;
 
 const phrases = [
     'theres no place like home',
@@ -45,6 +45,7 @@ function addPhraseToDisplay(arr) {
 const phraseArray = getRandomPhraseAsArray(phrases);
 addPhraseToDisplay(phraseArray);
 
+
 function checkLetter(guess) {
     const letters = document.getElementsByClassName('letter');
     let match = null;
@@ -56,20 +57,51 @@ function checkLetter(guess) {
                 }
         }
         if (i === letters.length) {
-            console.log("working");
             return match;
         }
 }
 
-//Not Finished
 keyboard.addEventListener('click', (e) => {
     if (e.target.tagName === 'BUTTON') {
+        const button = e.target;
         console.log(e.target.textContent);
         console.log(e.target);
-        e.target.className = "chosen";
-        e.target.setAttribute("disabled", true); //disables button on click
-        const letterFound = checkLetter(e.target);
+        button.className = "chosen";
+        button.setAttribute("disabled", true); //disables button on click
+        const letterFound = checkLetter(button);
         letterFound;
-        return letterFound;
+        if (letterFound === null) {
+            const img = document.getElementsByTagName('img');
+            img[missed].setAttribute('src', 'images/lostHeart.png');
+            missed ++;
+            console.log(missed);
+        }
+        checkWin();
+        console.log("checked");
     }
+
 })
+
+const resetButton = document.getElementsByClassName('btn_new_game');
+
+function checkWin() {
+    const show = document.getElementsByClassName('show');
+    const letters = document.getElementsByClassName('letter');
+    const overlay = document.getElementById('overlay');
+    if (show.length === letters.length) {
+        overlay.className = "win";
+        overlay.style.display = "flex";
+        overlay.firstElementChild.textContent = "You've Won";
+        startButton[0].textContent = "Reset";
+        startButton[0].className = "btn_new_game";
+        console.log("you won");
+    }
+    if (missed >= 5) {
+        overlay.className = "lose";
+        overlay.style.display = "flex";
+        overlay.firstElementChild.textContent = "You've Lost";
+        startButton[0].textContent = "Reset";
+        startButton[0].className = "btn_new_game";
+        console.log("youve lost")
+    }
+}
