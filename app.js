@@ -8,15 +8,45 @@ const phrases = [
     'im the king of the world',
     'its alive',
     'youre gonna need a bigger boat',
-    'to infinity and beyond',
-    'your mother was a hamster and your father smelt of elderberries'
+    'to infinity and beyond'
 ];
 
 
+// Hides overlay button if start game is clicked
+// If reset button is clicked, restarts game with reset function and creates new phrase
 startButton[0].addEventListener('click', (e) => {
-    const overlay = document.getElementById('overlay');
-    overlay.style.display = 'none';
+        const overlay = document.getElementById('overlay');
+        overlay.style.display = 'none';
+    
+    if (e.target.textContent === "Reset") {
+        missed = 0;
+        reset();
+        const randomPhrase = getRandomPhraseAsArray(phrases);
+        addPhraseToDisplay(randomPhrase);
+    }
 });
+
+// Deletes the phrase, reverts keyboard back to original state,
+// and changes hearts png back to liveHearts
+function reset() {
+    const li = document.querySelectorAll('ul li');
+        for (let i = 0; i < li.length; i++) {
+            li[i].remove();
+        }
+
+        const buttons = document.getElementsByTagName('button');
+        for (let i = 0; i < buttons.length; i++) {
+            buttons[i].removeAttribute('disabled');
+            buttons[i].classList.remove('chosen');
+            buttons[i].classList.remove('missed');
+        }
+
+        const img = document.getElementsByTagName('img');
+        for (let i = 0; i < img.length; i++) {
+            img[i].setAttribute('src', 'images/liveHeart.png');
+        }
+}
+
 
 // Gets a random phrase from the 'phrases' array and creates a new array of letters.
 function getRandomPhraseAsArray(arr) {
@@ -25,9 +55,9 @@ function getRandomPhraseAsArray(arr) {
     const newArray = randomPhrase.split('');
     return newArray;
 }
-getRandomPhraseAsArray(phrases);
 
-
+// Creates li and gives its textContent a letter from 'newArray'
+// If letter variable is a letter from a-z give it a class of letter, else give class of space
 function addPhraseToDisplay(arr) {
     for (let letter of arr) {
         const li = document.createElement('li');
@@ -46,6 +76,9 @@ const phraseArray = getRandomPhraseAsArray(phrases);
 addPhraseToDisplay(phraseArray);
 
 
+// Checks if the letter that the user clicked on the keyboard matches a letter from phrase
+// If letter matches, then gives a class name of show and returns the letter
+// else returns null
 function checkLetter(guess) {
     const letters = document.getElementsByClassName('letter');
     let match = null;
@@ -53,6 +86,7 @@ function checkLetter(guess) {
         for (i = 0; i < letters.length; i++) {
                 if (guess.textContent === letters[i].textContent) {
                     letters[i].className += ' show';
+                    letters[i].classList.add("apply-animation"); // Gives li wiggle & scale animation
                     match = guess.textContent;
                 }
         }
@@ -61,11 +95,13 @@ function checkLetter(guess) {
         }
 }
 
+// When user clicks on a letter from keyboard, that letter is passed into checkLetter function
+// If the letter matches then it will be displayed on screen
+// But if it returns null then one life will be taken away
+// checkWin function checks if user has won or lost the game
 keyboard.addEventListener('click', (e) => {
     if (e.target.tagName === 'BUTTON') {
         const button = e.target;
-        console.log(e.target.textContent);
-        console.log(e.target);
         button.className = "chosen";
         button.setAttribute("disabled", true); //disables button on click
         const letterFound = checkLetter(button);
@@ -74,16 +110,16 @@ keyboard.addEventListener('click', (e) => {
             const img = document.getElementsByTagName('img');
             img[missed].setAttribute('src', 'images/lostHeart.png');
             missed ++;
+            button.className = "missed";
             console.log(missed);
         }
-        checkWin();
-        console.log("checked");
+    checkWin();
     }
 
 })
 
-const resetButton = document.getElementsByClassName('btn_new_game');
-
+// If user guessues all letters then he has won the game
+// If users lives = 5 then he has lost
 function checkWin() {
     const show = document.getElementsByClassName('show');
     const letters = document.getElementsByClassName('letter');
@@ -92,16 +128,22 @@ function checkWin() {
         overlay.className = "win";
         overlay.style.display = "flex";
         overlay.firstElementChild.textContent = "You've Won";
+        for (let i = 0; i < letters.length; i++) {
+            letters[i].classList.remove("apply-animation");
+        }
+
         startButton[0].textContent = "Reset";
-        startButton[0].className = "btn_new_game";
         console.log("you won");
     }
     if (missed >= 5) {
         overlay.className = "lose";
         overlay.style.display = "flex";
         overlay.firstElementChild.textContent = "You've Lost";
+        for (let i = 0; i < letters.length; i++) {
+            letters[i].classList.remove("apply-animation");
+        }
+
         startButton[0].textContent = "Reset";
-        startButton[0].className = "btn_new_game";
         console.log("youve lost")
     }
 }
