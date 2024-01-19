@@ -8,22 +8,25 @@ const phrases = [
     'im the king of the world',
     'its alive',
     'youre gonna need a bigger boat',
-    'to infinity and beyond'
+    'to infinity and beyond',
+    'just keep swimming',
+    'you talking to me',
+    'nobody makes me bleed my own blood',
+    'are you not entertained'
 ];
 
 
 // Hides overlay button if start game is clicked
 // If reset button is clicked, restarts game with reset function and creates new phrase
 startButton[0].addEventListener('click', (e) => {
-        const overlay = document.getElementById('overlay');
-        overlay.style.display = 'none';
-    
     if (e.target.textContent === "Reset") {
         missed = 0;
         reset();
-        const randomPhrase = getRandomPhraseAsArray(phrases);
-        addPhraseToDisplay(randomPhrase);
     }
+    const overlay = document.getElementById('overlay');
+    overlay.style.display = 'none';
+    const randomPhrase = getRandomPhraseAsArray(phrases);
+    addPhraseToDisplay(randomPhrase);
 });
 
 // Deletes the phrase, reverts keyboard back to original state,
@@ -51,7 +54,6 @@ function reset() {
 // Gets a random phrase from the 'phrases' array and creates a new array of letters.
 function getRandomPhraseAsArray(arr) {
     const randomPhrase = arr[Math.floor( Math.random() * arr.length )];
-    console.log(randomPhrase);
     const newArray = randomPhrase.split('');
     return newArray;
 }
@@ -64,16 +66,14 @@ function addPhraseToDisplay(arr) {
         li.textContent = letter;
         const ul = phrase.firstElementChild;
         ul.append(li);
-        if (!(letter >= "a" && letter <= "z") &&
-            !(letter >= "A" && letter <= "Z")) { // Working but don't understand
-            li.className = "space";
+        // /[a-zA-Z]/ regex (regular expression) returns true if letter variable is a letter
+        if (/[a-zA-Z]/.test(letter)) {
+            li.className = "letter"
         } else {
-            li.className = "letter";
+            li.className = "space";
         }
     }
 }
-const phraseArray = getRandomPhraseAsArray(phrases);
-addPhraseToDisplay(phraseArray);
 
 
 // Checks if the letter that the user clicked on the keyboard matches a letter from phrase
@@ -111,7 +111,6 @@ keyboard.addEventListener('click', (e) => {
             img[missed].setAttribute('src', 'images/lostHeart.png');
             missed ++;
             button.className = "missed";
-            console.log(missed);
         }
     checkWin();
     }
@@ -133,7 +132,6 @@ function checkWin() {
         }
 
         startButton[0].textContent = "Reset";
-        console.log("you won");
     }
     if (missed >= 5) {
         overlay.className = "lose";
@@ -144,6 +142,5 @@ function checkWin() {
         }
 
         startButton[0].textContent = "Reset";
-        console.log("youve lost")
     }
 }
