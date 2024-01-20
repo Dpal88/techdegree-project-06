@@ -33,6 +33,7 @@ startButton[0].addEventListener('click', (e) => {
 // and changes hearts png back to liveHearts
 function reset() {
     const li = document.querySelectorAll('ul li');
+    document.querySelector('h3').remove();
         for (let i = 0; i < li.length; i++) {
             li[i].remove();
         }
