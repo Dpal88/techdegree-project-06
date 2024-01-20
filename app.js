@@ -83,17 +83,14 @@ function addPhraseToDisplay(arr) {
 function checkLetter(guess) {
     const letters = document.getElementsByClassName('letter');
     let match = null;
-    let i = 0;
-        for (i = 0; i < letters.length; i++) {
+        for (let i = 0; i < letters.length; i++) {
                 if (guess.textContent === letters[i].textContent) {
                     letters[i].className += ' show';
                     letters[i].classList.add("apply-animation"); // Gives li wiggle & scale animation
                     match = guess.textContent;
                 }
         }
-        if (i === letters.length) {
-            return match;
-        }
+        return match;
 }
 
 // When user clicks on a letter from keyboard, that letter is passed into checkLetter function
