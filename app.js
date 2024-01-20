@@ -123,10 +123,12 @@ function checkWin() {
     const show = document.getElementsByClassName('show');
     const letters = document.getElementsByClassName('letter');
     const overlay = document.getElementById('overlay');
+    const h3 = document.createElement('h3');
     if (show.length === letters.length) {
         overlay.className = "win";
         overlay.style.display = "flex";
-        overlay.firstElementChild.textContent = "You've Won";
+        h3.textContent = "You've Won!";
+        overlay.append(h3);
         for (let i = 0; i < letters.length; i++) {
             letters[i].classList.remove("apply-animation");
         }
@@ -136,7 +138,8 @@ function checkWin() {
     if (missed >= 5) {
         overlay.className = "lose";
         overlay.style.display = "flex";
-        overlay.firstElementChild.textContent = "You've Lost";
+        h3.textContent = "You've Lost!";
+        overlay.append(h3);
         for (let i = 0; i < letters.length; i++) {
             letters[i].classList.remove("apply-animation");
         }
